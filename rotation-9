@@ -1,0 +1,21 @@
+import cv2
+
+# Load the image
+image = cv2.imread(r"C:\Users\sanja\OneDrive\Pictures\Saved Pictures\question-5.png")
+(h, w) = image.shape[:2]
+center = (w // 2, h // 2)
+
+# Rotate 90° Clockwise
+M_cw = cv2.getRotationMatrix2D(center, -90, 1.0)
+rotated_cw = cv2.warpAffine(image, M_cw, (w, h))
+
+# Rotate 90° Counterclockwise
+M_ccw = cv2.getRotationMatrix2D(center, 90, 1.0)
+rotated_ccw = cv2.warpAffine(image, M_ccw, (w, h))
+
+# Display Results
+cv2.imshow('Original', image)
+cv2.imshow('Clockwise Rotation', rotated_cw)
+cv2.imshow('Counterclockwise Rotation', rotated_ccw)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
