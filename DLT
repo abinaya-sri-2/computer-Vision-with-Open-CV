@@ -1,0 +1,37 @@
+import cv2
+import numpy as np
+
+# Define corresponding points in the source and destination images
+# These should be 4 or more pairs of corresponding points
+pts_src = np.array([
+    [100, 100],
+    [400, 100],
+    [100, 400],
+    [400, 400]
+], dtype=np.float32)
+
+pts_dst = np.array([
+    [0, 0],
+    [300, 0],
+    [0, 300],
+    [300, 300]
+], dtype=np.float32)
+
+# Compute the homography matrix using DLT (OpenCV uses normalized DLT internally)
+H, status = cv2.findHomography(pts_src, pts_dst, method=0)
+
+# Load the image
+image = cv2.imread(r"C:\Users\sanja\OneDrive\Pictures\Saved Pictures\question-5.png", cv2.IMREAD_GRAYSCALE)
+
+# Apply the homography transformation
+warped = cv2.warpPerspective(image, H, (300, 300))
+
+# Optional: Apply edge detection
+edges = cv2.Canny(warped, 30, 100)
+
+# Display results
+cv2.imshow('Original Image', image)
+cv2.imshow('DLT Transformed Image', warped)
+cv2.imshow('Canny Edges after DLT', edges)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
