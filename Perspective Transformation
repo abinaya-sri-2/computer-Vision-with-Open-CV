@@ -1,0 +1,30 @@
+import cv2
+import numpy as np
+
+# Load the image in grayscale
+image = cv2.imread(r"C:\Users\sanja\OneDrive\Pictures\Saved Pictures\question-5.png", cv2.IMREAD_GRAYSCALE)
+
+# Image dimensions
+rows, cols = image.shape
+
+# Define 4 source points on the image (example coordinates)
+pts1 = np.float32([[100, 100], [400, 100], [100, 400], [400, 400]])
+
+# Define 4 destination points to straighten the perspective
+pts2 = np.float32([[0, 0], [300, 0], [0, 300], [300, 300]])
+
+# Compute the perspective transformation matrix
+M = cv2.getPerspectiveTransform(pts1, pts2)
+
+# Apply the perspective transformation
+perspective_transformed = cv2.warpPerspective(image, M, (300, 300))
+
+# Apply Canny edge detection on the transformed image
+edges = cv2.Canny(perspective_transformed, threshold1=30, threshold2=100)
+
+# Show the results
+cv2.imshow('Original Image', image)
+cv2.imshow('Perspective Transformed Image', perspective_transformed)
+cv2.imshow('Canny Edges after Perspective Transformation', edges)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
