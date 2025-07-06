@@ -1,0 +1,41 @@
+import cv2
+import numpy as np
+
+# Load the grayscale image
+image = cv2.imread(r"C:\Users\sanja\OneDrive\Pictures\Saved Pictures\question-5.png", cv2.IMREAD_GRAYSCALE)
+
+# Check if image was loaded successfully
+if image is None:
+    raise FileNotFoundError("Image not found at the specified path.")
+
+# Define four source points from the input image
+pts_src = np.float32([
+    [100, 100],
+    [400, 100],
+    [100, 400],
+    [400, 400]
+])
+
+# Define corresponding destination points (target rectangle)
+pts_dst = np.float32([
+    [0, 0],
+    [300, 0],
+    [0, 300],
+    [300, 300]
+])
+
+# Compute the homography matrix
+H, status = cv2.findHomography(pts_src, pts_dst)
+
+# Apply the homography transformation
+transformed_image = cv2.warpPerspective(image, H, (300, 300))
+
+# Optional: Edge detection
+edges = cv2.Canny(transformed_image, 30, 100)
+
+# Display results
+cv2.imshow('Original Image', image)
+cv2.imshow('Homography Transformed Image', transformed_image)
+cv2.imshow('Canny Edges after Homography', edges)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
