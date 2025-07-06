@@ -1,0 +1,26 @@
+import cv2
+import numpy as np
+
+# Load the image in grayscale
+image = cv2.imread(r"C:\Users\sanja\OneDrive\Pictures\Saved Pictures\question-5.png", cv2.IMREAD_GRAYSCALE)
+
+# Check if image loaded successfully
+if image is None:
+    raise FileNotFoundError("Image not found at the specified path.")
+
+# Step 1: Apply Gaussian Blur to create the 'unsharp' version
+blurred = cv2.GaussianBlur(image, (9, 9), sigmaX=2)
+
+# Step 2: Create the mask (original - blurred)
+mask = cv2.subtract(image, blurred)
+
+# Step 3: Add the mask back to the original image to sharpen
+sharpened = cv2.add(image, mask)
+
+# Display results
+cv2.imshow('Original Image', image)
+cv2.imshow('Blurred Image', blurred)
+cv2.imshow('Unsharp Mask', mask)
+cv2.imshow('Sharpened Image (Unsharp Masking)', sharpened)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
