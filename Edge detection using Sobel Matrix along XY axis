@@ -1,0 +1,29 @@
+
+import cv2
+import numpy as np
+
+# Load the image in grayscale
+image = cv2.imread(r"C:\Users\sanja\OneDrive\Pictures\Saved Pictures\question-5.png", cv2.IMREAD_GRAYSCALE)
+
+# Check if image loaded successfully
+if image is None:
+    raise FileNotFoundError("Image not found at the specified path.")
+
+# Apply Gaussian Blur to reduce noise
+blurred = cv2.GaussianBlur(image, (3, 3), 0)
+
+# Apply Sobel operator in X and Y directions
+sobel_x = cv2.Sobel(blurred, cv2.CV_64F, dx=1, dy=0, ksize=3)
+sobel_y = cv2.Sobel(blurred, cv2.CV_64F, dx=0, dy=1, ksize=3)
+
+# Compute the gradient magnitude
+sobel_xy = np.sqrt(sobel_x**2 + sobel_y**2)
+
+# Convert to 8-bit image for display
+sobel_xy_abs = cv2.convertScaleAbs(sobel_xy)
+
+# Display the results
+cv2.imshow('Original Image', image)
+cv2.imshow('Sobel XY - Combined Edges', sobel_xy_abs)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
