@@ -1,0 +1,24 @@
+import cv2
+import numpy as np
+
+# Load the image in grayscale
+image = cv2.imread(r"C:\Users\sanja\OneDrive\Pictures\Saved Pictures\question-5.png", cv2.IMREAD_GRAYSCALE)
+
+# Check if image loaded successfully
+if image is None:
+    raise FileNotFoundError("Image not found at the specified path.")
+
+# Apply Gaussian Blur to reduce noise
+blurred = cv2.GaussianBlur(image, (3, 3), 0)
+
+# Apply Sobel operator along Y-axis (detects horizontal edges)
+sobel_y = cv2.Sobel(src=blurred, ddepth=cv2.CV_64F, dx=0, dy=1, ksize=3)
+
+# Convert to absolute values and 8-bit for display
+sobel_y_abs = cv2.convertScaleAbs(sobel_y)
+
+# Display the results
+cv2.imshow('Original Image', image)
+cv2.imshow('Sobel Y - Horizontal Edges', sobel_y_abs)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
