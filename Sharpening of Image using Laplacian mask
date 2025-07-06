@@ -1,0 +1,32 @@
+import cv2
+import numpy as np
+
+# Load the image in grayscale
+image = cv2.imread(r"C:\Users\sanja\OneDrive\Pictures\Saved Pictures\question-5.png", cv2.IMREAD_GRAYSCALE)
+
+# Check if image loaded successfully
+if image is None:
+    raise FileNotFoundError("Image not found at the specified path.")
+
+# Define Laplacian kernel with negative center coefficient
+laplacian_kernel = np.array([
+    [0,  1, 0],
+    [1, -4, 1],
+    [0,  1, 0]
+], dtype=np.float32)
+
+# Apply the Laplacian filter
+laplacian = cv2.filter2D(image, ddepth=cv2.CV_64F, kernel=laplacian_kernel)
+
+# Convert Laplacian to same type as original image
+laplacian_abs = cv2.convertScaleAbs(laplacian)
+
+# Add Laplacian to original image to sharpen (since center is negative)
+sharpened = cv2.add(image, laplacian_abs)
+
+# Display results
+cv2.imshow('Original Image', image)
+cv2.imshow('Laplacian (Negative Center)', laplacian_abs)
+cv2.imshow('Sharpened Image', sharpened)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
