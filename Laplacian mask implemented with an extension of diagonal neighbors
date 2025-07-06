@@ -1,0 +1,32 @@
+import cv2
+import numpy as np
+
+# Load the image in grayscale
+image = cv2.imread(r"C:\Users\sanja\OneDrive\Pictures\Saved Pictures\question-5.png", cv2.IMREAD_GRAYSCALE)
+
+# Check if image loaded successfully
+if image is None:
+    raise FileNotFoundError("Image not found at the specified path.")
+
+# Define Laplacian kernel with diagonal neighbors (8-neighbor connectivity)
+laplacian_kernel = np.array([
+    [1,  1, 1],
+    [1, -8, 1],
+    [1,  1, 1]
+], dtype=np.float32)
+
+# Apply the Laplacian filter
+laplacian = cv2.filter2D(image, ddepth=cv2.CV_64F, kernel=laplacian_kernel)
+
+# Convert to absolute values and 8-bit for display
+laplacian_abs = cv2.convertScaleAbs(laplacian)
+
+# Sharpen the image by subtracting the Laplacian (since center is negative)
+sharpened = cv2.add(image, laplacian_abs)
+
+# Display results
+cv2.imshow('Original Image', image)
+cv2.imshow('Laplacian (Diagonal Neighbors)', laplacian_abs)
+cv2.imshow('Sharpened Image', sharpened)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
